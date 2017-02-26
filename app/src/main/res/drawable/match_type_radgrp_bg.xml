@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- defining corner radius for rectangle -->
+    <corners android:radius="10dp" />
+
+    <!-- adding inner content paddding -->
+    <padding
+        android:bottom="4dp"
+        android:top="4dp"
+        android:left="4dp"
+        android:right="4dp" />
+
+    <!-- solid color for the background -->
+    <solid android:color="@color/matchTypeRadGrpBackground" />
+
+    <!-- rectangle border color and width -->
+    <stroke android:width="2dp" android:color="@color/matchTypeRadGrpBorder" />
+
+</shape>
