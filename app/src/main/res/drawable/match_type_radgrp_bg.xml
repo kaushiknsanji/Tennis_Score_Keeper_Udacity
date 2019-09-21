@@ -5,7 +5,7 @@
     <!-- defining corner radius for rectangle -->
     <corners android:radius="10dp" />
 
-    <!-- adding inner content paddding -->
+    <!-- adding inner content padding -->
     <padding
         android:bottom="4dp"
         android:top="4dp"

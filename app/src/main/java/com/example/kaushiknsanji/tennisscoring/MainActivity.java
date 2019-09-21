@@ -1,9 +1,9 @@
 package com.example.kaushiknsanji.tennisscoring;
 
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -54,14 +54,145 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Hiding the Tie Breaker Score Layout
-        toggleTieBreakerLayout(false);
+        if (savedInstanceState == null) {
+            //When the activity is loaded for the first time
 
-        //Update Game play text with the Welcome message
-        updateGamePlayText(WELCOME_MSG_STR);
+            Log.i(this.getClass().getSimpleName(), "onCreate: loaded for the first time");
 
-        //disabling the plus buttons
-        enablePlusButtons(false);
+            //Hiding the Tie Breaker Score Layout
+            toggleTieBreakerLayout(false);
+
+            //Update Game play text with the Welcome message
+            updateGamePlayText(WELCOME_MSG_STR);
+
+            //disabling the plus buttons
+            enablePlusButtons(false);
+        }
+
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i(this.getClass().getSimpleName(), "onSaveInstanceState: called");
+
+        //Adding all the member variables to the bundle : START
+        outState.putBoolean("IsGameStarted", mIsGameStarted);
+        outState.putBoolean("IsMatchTypeMen", mIsMatchTypeMen);
+        outState.putBoolean("IsMatchTypeWomen", mIsMatchTypeWomen);
+        outState.putBoolean("IsDeuceGame", mIsDeuceGame);
+        outState.putBoolean("IsTieBreaker", mIsTieBreaker);
+
+        outState.putInt("PlayerToServe", mPlayerToServe);
+        outState.putInt("PlayerToOpenSet", mPlayerToOpenSet);
+        outState.putInt("CurrentSetPlay", mCurrentSetPlay);
+        outState.putInt("TotalSetsToPlay", mTotalSetsToPlay);
+        outState.putInt("TotalSetsToWin", mTotalSetsToWin);
+
+        if (mIsGameStarted) {
+
+            for (int i = 0; i <= mTotalSetsToPlay; i++) {
+                outState.putString("P1ScoreBoardTextList_" + i, mP1ScoreBoardTextList.get(i).getText().toString());
+                outState.putString("P2ScoreBoardTextList_" + i, mP2ScoreBoardTextList.get(i).getText().toString());
+            }
+
+            for (int i = 0; i < 3; i++) {
+                outState.putString("P1GamePlayTextList_" + i, mP1GamePlayTextList.get(i).getText().toString());
+                outState.putString("P2GamePlayTextList_" + i, mP2GamePlayTextList.get(i).getText().toString());
+            }
+
+        }
+
+        //Saving state of plus buttons
+        Button p1PlusButton = (Button) findViewById(R.id.p1_plus_btn);
+        outState.putBoolean("IsPlusButtonEnabled", p1PlusButton.isEnabled());
+
+        //Saving the Game Play Text
+        TextView gamePlayTextView = (TextView) findViewById(R.id.game_play_text);
+        outState.putString("GamePlayText", gamePlayTextView.getText().toString());
+
+        //Saving the Start-Reset Button Text
+        Button startResetButton = (Button) findViewById(R.id.start_reset_btn);
+        outState.putString("StartResetButtonText", startResetButton.getText().toString());
+
+        //Adding all the member variables to the bundle : END
+
+        //Saving the state of the view hierarchy through default implementation
+        super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i(this.getClass().getSimpleName(), "onRestoreInstanceState: called");
+
+        //Restoring the state of the view hierarchy through default implementation
+        super.onRestoreInstanceState(savedInstanceState);
+
+        //Restoring all the member variables from the bundle : START
+        mIsGameStarted = savedInstanceState.getBoolean("IsGameStarted");
+        mIsDeuceGame = savedInstanceState.getBoolean("IsDeuceGame");
+        mIsMatchTypeMen = savedInstanceState.getBoolean("IsMatchTypeMen");
+        mIsMatchTypeWomen = savedInstanceState.getBoolean("IsMatchTypeWomen");
+        mIsTieBreaker = savedInstanceState.getBoolean("IsTieBreaker");
+
+        mPlayerToServe = savedInstanceState.getInt("PlayerToServe");
+        mPlayerToOpenSet = savedInstanceState.getInt("PlayerToOpenSet");
+        mCurrentSetPlay = savedInstanceState.getInt("CurrentSetPlay");
+        mTotalSetsToPlay = savedInstanceState.getInt("TotalSetsToPlay");
+        mTotalSetsToWin = savedInstanceState.getInt("TotalSetsToWin");
+
+        //Restoring the state of Match type selection
+        RadioGroup matchTypeRadioGroup = (RadioGroup) findViewById(R.id.match_type_rbtn_grp);
+        if (mIsMatchTypeMen) {
+            matchTypeRadioGroup.check(R.id.mens_rbtn);
+        } else if (mIsMatchTypeWomen) {
+            matchTypeRadioGroup.check(R.id.womens_rbtn);
+        }
+
+        if (mIsMatchTypeMen || mIsMatchTypeWomen) {
+            relayoutMatchTypeScoreboard(); //Relaying out scoreboard only when selection is already done
+        }
+
+        //Restoring the state of the plus buttons
+        enablePlusButtons(savedInstanceState.getBoolean("IsPlusButtonEnabled"));
+
+        //Restoring the Game Play Text
+        updateGamePlayText(savedInstanceState.getString("GamePlayText"));
+
+        //Restoring the Start-Reset Button Text
+        changeStartResetButtonText(savedInstanceState.getString("StartResetButtonText"));
+
+        //Restoring the state of Tie-Breaker layout
+        toggleTieBreakerLayout(mIsTieBreaker);
+
+        if (mIsGameStarted) {
+            enableMatchTypeRadioGrp(false); //Disabling only when the Game was previously started
+
+            //Initializing the ArrayLists to save the scores
+            initScoreArrayLists();
+
+            //Restoring the Scoreboard TextViews
+            for (int i = 0; i <= mTotalSetsToPlay; i++) {
+                String p1ScoreStr = savedInstanceState.getString("P1ScoreBoardTextList_" + i, "0");
+                mP1ScoreBoardTextList.get(i).setText(p1ScoreStr);
+                String p2ScoreStr = savedInstanceState.getString("P2ScoreBoardTextList_" + i, "0");
+                mP2ScoreBoardTextList.get(i).setText(p2ScoreStr);
+            }
+
+            //Restoring the GamePlay Scoreboard TextViews
+            for (int i = 0; i < 3; i++) {
+                String p1ScoreStr = savedInstanceState.getString("P1GamePlayTextList_" + i, "0");
+                mP1GamePlayTextList.get(i).setText(p1ScoreStr);
+                String p2ScoreStr = savedInstanceState.getString("P2GamePlayTextList_" + i, "0");
+                mP2GamePlayTextList.get(i).setText(p2ScoreStr);
+            }
+
+            //Restoring the active player highlights
+            setActivePlayerAttr();
+        }
+
+        //Restoring all the member variables from the bundle : END
     }
 
     /**
@@ -101,6 +232,57 @@ public class MainActivity extends AppCompatActivity
         //Changing for Player - 2
         Button p2PlusButton = (Button) findViewById(R.id.p2_plus_btn);
         p2PlusButton.setEnabled(enabled);
+    }
+
+    /**
+     * Method to initialize ArrayLists to TextViews that save/update the scores
+     */
+    private void initScoreArrayLists() {
+        //Initializing the TextView ArrayLists of player 1 : START
+        mP1ScoreBoardTextList = new ArrayList<>(mTotalSetsToPlay + 1);
+        mP1GamePlayTextList = new ArrayList<>(3); //Size inclusive of Tie breaker
+
+        if (mIsMatchTypeWomen) {
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_total_set_pts)); //0 index
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set1_pts));
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set2_pts));
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set3_pts));
+        } else if (mIsMatchTypeMen) {
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_total_set_pts)); //0 index
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set1_pts));
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set2_pts));
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set3_pts));
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set4_pts));
+            mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set5_pts));
+        }
+
+        mP1GamePlayTextList.add((TextView) findViewById(R.id.p1_game_pts_text)); //0 index
+        mP1GamePlayTextList.add((TextView) findViewById(R.id.p1_gameplay_pts_text));
+        mP1GamePlayTextList.add((TextView) findViewById(R.id.p1_tb_pts_text));
+        //Initializing the TextView ArrayLists of player 1 : END
+
+        //Initializing the TextView ArrayLists of player 2 : START
+        mP2ScoreBoardTextList = new ArrayList<>(mTotalSetsToPlay + 1);
+        mP2GamePlayTextList = new ArrayList<>(3); //Size inclusive of Tie breaker
+
+        if (mIsMatchTypeWomen) {
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_total_set_pts)); //0 index
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set1_pts));
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set2_pts));
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set3_pts));
+        } else if (mIsMatchTypeMen) {
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_total_set_pts)); //0 index
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set1_pts));
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set2_pts));
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set3_pts));
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set4_pts));
+            mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set5_pts));
+        }
+
+        mP2GamePlayTextList.add((TextView) findViewById(R.id.p2_game_pts_text)); //0 index
+        mP2GamePlayTextList.add((TextView) findViewById(R.id.p2_gameplay_pts_text));
+        mP2GamePlayTextList.add((TextView) findViewById(R.id.p2_tb_pts_text));
+        //Initializing the TextView ArrayLists of player 2 : END
     }
 
     /**
@@ -177,9 +359,6 @@ public class MainActivity extends AppCompatActivity
                 mPlayerToOpenSet = tossOfTheMatch();
                 mPlayerToServe = mPlayerToOpenSet;
 
-                Log.i(this.getClass().getSimpleName(), "onStartResetButtonClicked: mPlayerToServe " + mPlayerToServe);
-                Log.i(this.getClass().getSimpleName(), "onStartResetButtonClicked: mPlayerToOpenSet " + mPlayerToOpenSet);
-
                 //updating styles for the player ready to serve
                 setActivePlayerAttr();
 
@@ -192,51 +371,8 @@ public class MainActivity extends AppCompatActivity
                 //Changing the Text on the Start/Reset Button
                 changeStartResetButtonText("Reset Match");
 
-                //Initializing the TextView ArrayLists of player 1 : START
-                mP1ScoreBoardTextList = new ArrayList<TextView>(mTotalSetsToPlay + 1);
-                mP1GamePlayTextList = new ArrayList<TextView>(3); //Size inclusive of Tie breaker
-
-                if (mIsMatchTypeWomen) {
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_total_set_pts)); //0 index
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set1_pts));
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set2_pts));
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set3_pts));
-                } else if (mIsMatchTypeMen) {
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_total_set_pts)); //0 index
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set1_pts));
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set2_pts));
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set3_pts));
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set4_pts));
-                    mP1ScoreBoardTextList.add((TextView) findViewById(R.id.p1_set5_pts));
-                }
-
-                mP1GamePlayTextList.add((TextView) findViewById(R.id.p1_game_pts_text)); //0 index
-                mP1GamePlayTextList.add((TextView) findViewById(R.id.p1_gameplay_pts_text));
-                mP1GamePlayTextList.add((TextView) findViewById(R.id.p1_tb_pts_text));
-                //Initializing the TextView ArrayLists of player 1 : END
-
-                //Initializing the TextView ArrayLists of player 2 : START
-                mP2ScoreBoardTextList = new ArrayList<TextView>(mTotalSetsToPlay + 1);
-                mP2GamePlayTextList = new ArrayList<TextView>(3); //Size inclusive of Tie breaker
-
-                if (mIsMatchTypeWomen) {
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_total_set_pts)); //0 index
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set1_pts));
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set2_pts));
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set3_pts));
-                } else if (mIsMatchTypeMen) {
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_total_set_pts)); //0 index
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set1_pts));
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set2_pts));
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set3_pts));
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set4_pts));
-                    mP2ScoreBoardTextList.add((TextView) findViewById(R.id.p2_set5_pts));
-                }
-
-                mP2GamePlayTextList.add((TextView) findViewById(R.id.p2_game_pts_text)); //0 index
-                mP2GamePlayTextList.add((TextView) findViewById(R.id.p2_gameplay_pts_text));
-                mP2GamePlayTextList.add((TextView) findViewById(R.id.p2_tb_pts_text));
-                //Initializing the TextView ArrayLists of player 2 : END
+                //Initializing the ArrayLists to save the scores
+                initScoreArrayLists();
 
                 //Initializing the current Set being played to 1
                 mCurrentSetPlay = 1;
@@ -276,9 +412,7 @@ public class MainActivity extends AppCompatActivity
         TextView gamePlayTextView = (TextView) findViewById(R.id.game_play_text);
         if (append) {
             //When the text is to be appended to existing text
-            StringBuilder msgBuilder = new StringBuilder(gamePlayTextView.getText().toString());
-            msgBuilder.append("\n" + message); //appending with new line
-            gamePlayTextView.setText(msgBuilder.toString());
+            gamePlayTextView.setText(gamePlayTextView.getText().toString() + "\n" + message);
         } else {
             //When the text need not be appended to existing text
             gamePlayTextView.setText(message);
@@ -912,18 +1046,12 @@ public class MainActivity extends AppCompatActivity
             //Updating current Play of Set to Next Set
             mCurrentSetPlay += 1;
 
-            Log.i(this.getClass().getSimpleName(), "updateSetPoints: before: mPlayerToServe " + mPlayerToServe);
-            Log.i(this.getClass().getSimpleName(), "updateSetPoints: before: mPlayerToOpenSet " + mPlayerToOpenSet);
-
             //Updating the Player to Serve the Next Set
             mPlayerToOpenSet = (mPlayerToOpenSet % 2) + 1;
             mPlayerToServe = mPlayerToOpenSet;
 
             //Highlighting the player who serves next
             setActivePlayerAttr();
-
-            Log.i(this.getClass().getSimpleName(), "updateSetPoints: after: mPlayerToServe " + mPlayerToServe);
-            Log.i(this.getClass().getSimpleName(), "updateSetPoints: after: mPlayerToOpenSet " + mPlayerToOpenSet);
 
             //Updating the Game Play text for Next Set
             if (mPlayerToServe == 1) {
