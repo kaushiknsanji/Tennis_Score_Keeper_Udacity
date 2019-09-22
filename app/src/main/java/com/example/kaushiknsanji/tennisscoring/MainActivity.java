@@ -19,7 +19,7 @@ import java.util.Random;
  * App's Main Activity which is a Single Screen App that takes care of the Tennis Score keeping
  * of current Match between players based on the Match Type(Gender) Selection
  *
- * @author <a href="mailto:kaushiknsanji@gmail.com">Kaushik N Sanji</a>
+ * @author Kaushik N Sanji
  */
 public class MainActivity extends AppCompatActivity
         implements GamePlayTextConstantsInterface {
@@ -104,15 +104,15 @@ public class MainActivity extends AppCompatActivity
         }
 
         //Saving state of plus buttons
-        Button p1PlusButton = (Button) findViewById(R.id.p1_plus_btn);
+        Button p1PlusButton = findViewById(R.id.p1_plus_btn);
         outState.putBoolean("IsPlusButtonEnabled", p1PlusButton.isEnabled());
 
         //Saving the Game Play Text
-        TextView gamePlayTextView = (TextView) findViewById(R.id.game_play_text);
+        TextView gamePlayTextView = findViewById(R.id.game_play_text);
         outState.putString("GamePlayText", gamePlayTextView.getText().toString());
 
         //Saving the Start-Reset Button Text
-        Button startResetButton = (Button) findViewById(R.id.start_reset_btn);
+        Button startResetButton = findViewById(R.id.start_reset_btn);
         outState.putString("StartResetButtonText", startResetButton.getText().toString());
 
         //Adding all the member variables to the bundle : END
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
         mTotalSetsToWin = savedInstanceState.getInt("TotalSetsToWin");
 
         //Restoring the state of Match type selection
-        RadioGroup matchTypeRadioGroup = (RadioGroup) findViewById(R.id.match_type_rbtn_grp);
+        RadioGroup matchTypeRadioGroup = findViewById(R.id.match_type_rbtn_grp);
         if (mIsMatchTypeMen) {
             matchTypeRadioGroup.check(R.id.mens_rbtn);
         } else if (mIsMatchTypeWomen) {
@@ -226,11 +226,11 @@ public class MainActivity extends AppCompatActivity
      */
     private void enablePlusButtons(boolean enabled) {
         //Changing for Player - 1
-        Button p1PlusButton = (Button) findViewById(R.id.p1_plus_btn);
+        Button p1PlusButton = findViewById(R.id.p1_plus_btn);
         p1PlusButton.setEnabled(enabled);
 
         //Changing for Player - 2
-        Button p2PlusButton = (Button) findViewById(R.id.p2_plus_btn);
+        Button p2PlusButton = findViewById(R.id.p2_plus_btn);
         p2PlusButton.setEnabled(enabled);
     }
 
@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity
      * @param buttonTextMsg <br/> - String message to be displayed on the start/reset button
      */
     private void changeStartResetButtonText(String buttonTextMsg) {
-        Button startResetButton = (Button) findViewById(R.id.start_reset_btn);
+        Button startResetButton = findViewById(R.id.start_reset_btn);
         //Changing the Text on the Start/Reset Button
         startResetButton.setText(buttonTextMsg);
     }
@@ -409,7 +409,7 @@ public class MainActivity extends AppCompatActivity
      *                <br/><b>FALSE</b> - otherwise
      */
     private void updateGamePlayText(String message, boolean append) {
-        TextView gamePlayTextView = (TextView) findViewById(R.id.game_play_text);
+        TextView gamePlayTextView = findViewById(R.id.game_play_text);
         if (append) {
             //When the text is to be appended to existing text
             gamePlayTextView.setText(gamePlayTextView.getText().toString() + "\n" + message);
@@ -483,8 +483,8 @@ public class MainActivity extends AppCompatActivity
      *                <br/><b>FALSE</b> - to disable
      */
     private void enableMatchTypeRadioGrp(boolean enabled) {
-        RadioButton mensRadioButton = (RadioButton) findViewById(R.id.mens_rbtn);
-        RadioButton womensRadioButton = (RadioButton) findViewById(R.id.womens_rbtn);
+        RadioButton mensRadioButton = findViewById(R.id.mens_rbtn);
+        RadioButton womensRadioButton = findViewById(R.id.womens_rbtn);
 
         mensRadioButton.setEnabled(enabled);
         womensRadioButton.setEnabled(enabled);
@@ -494,7 +494,7 @@ public class MainActivity extends AppCompatActivity
      * Method to clear the Match Type Radio Button selection
      */
     private void clearMatchTypeRadioGrp() {
-        RadioGroup matchTypeRadioGroup = (RadioGroup) findViewById(R.id.match_type_rbtn_grp);
+        RadioGroup matchTypeRadioGroup = findViewById(R.id.match_type_rbtn_grp);
         matchTypeRadioGroup.clearCheck();
     }
 
@@ -503,7 +503,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void relayoutMatchTypeScoreboard() {
 
-        TableLayout scoreboardTableLayout = (TableLayout) findViewById(R.id.scoreboard_table);
+        TableLayout scoreboardTableLayout = findViewById(R.id.scoreboard_table);
 
         if (mIsMatchTypeWomen) {
             //When it is women's match, set 4 & 5 are not present
@@ -532,10 +532,10 @@ public class MainActivity extends AppCompatActivity
             //When Player 1 is serving
 
             //Update styles for Player 1 : START
-            TextView p1ScoreBoardText = (TextView) findViewById(R.id.player1_row_0);
+            TextView p1ScoreBoardText = findViewById(R.id.player1_row_0);
             p1ScoreBoardText.setTypeface(Typeface.create(p1ScoreBoardText.getTypeface(), Typeface.NORMAL), Typeface.BOLD);
 
-            TextView p1GamePlayHdrText = (TextView) findViewById(R.id.p1_gameplay_hdr_text);
+            TextView p1GamePlayHdrText = findViewById(R.id.p1_gameplay_hdr_text);
             p1GamePlayHdrText.setTextColor(ContextCompat.getColor(this, R.color.activePlayerColor));
 
             View p1GamePlayHdrLineView = findViewById(R.id.p1_gameplay_hdr_line);
@@ -544,10 +544,10 @@ public class MainActivity extends AppCompatActivity
 
 
             //Reset styles for Player 2 : START
-            TextView p2ScoreBoardText = (TextView) findViewById(R.id.player2_row_1);
+            TextView p2ScoreBoardText = findViewById(R.id.player2_row_1);
             p2ScoreBoardText.setTypeface(Typeface.create(p2ScoreBoardText.getTypeface(), Typeface.NORMAL), Typeface.NORMAL);
 
-            TextView p2GamePlayHdrText = (TextView) findViewById(R.id.p2_gameplay_hdr_text);
+            TextView p2GamePlayHdrText = findViewById(R.id.p2_gameplay_hdr_text);
             p2GamePlayHdrText.setTextColor(ContextCompat.getColor(this, R.color.p2GamePlayHdrTextColor));
 
             View p2GamePlayHdrLineView = findViewById(R.id.p2_gameplay_hdr_line);
@@ -558,10 +558,10 @@ public class MainActivity extends AppCompatActivity
             //When Player 2 is serving
 
             //Update styles for Player 2 : START
-            TextView p2ScoreBoardText = (TextView) findViewById(R.id.player2_row_1);
+            TextView p2ScoreBoardText = findViewById(R.id.player2_row_1);
             p2ScoreBoardText.setTypeface(Typeface.create(p2ScoreBoardText.getTypeface(), Typeface.NORMAL), Typeface.BOLD);
 
-            TextView p2GamePlayHdrText = (TextView) findViewById(R.id.p2_gameplay_hdr_text);
+            TextView p2GamePlayHdrText = findViewById(R.id.p2_gameplay_hdr_text);
             p2GamePlayHdrText.setTextColor(ContextCompat.getColor(this, R.color.activePlayerColor));
 
             View p2GamePlayHdrLineView = findViewById(R.id.p2_gameplay_hdr_line);
@@ -569,10 +569,10 @@ public class MainActivity extends AppCompatActivity
             //Update styles for Player 2 : END
 
             //Reset styles for Player 1 : START
-            TextView p1ScoreBoardText = (TextView) findViewById(R.id.player1_row_0);
+            TextView p1ScoreBoardText = findViewById(R.id.player1_row_0);
             p1ScoreBoardText.setTypeface(Typeface.create(p1ScoreBoardText.getTypeface(), Typeface.NORMAL), Typeface.NORMAL);
 
-            TextView p1GamePlayHdrText = (TextView) findViewById(R.id.p1_gameplay_hdr_text);
+            TextView p1GamePlayHdrText = findViewById(R.id.p1_gameplay_hdr_text);
             p1GamePlayHdrText.setTextColor(ContextCompat.getColor(this, R.color.p1GamePlayHdrTextColor));
 
             View p1GamePlayHdrLineView = findViewById(R.id.p1_gameplay_hdr_line);
@@ -583,10 +583,10 @@ public class MainActivity extends AppCompatActivity
             //To completely reset to defaults
 
             //Reset styles for Player 1 : START
-            TextView p1ScoreBoardText = (TextView) findViewById(R.id.player1_row_0);
+            TextView p1ScoreBoardText = findViewById(R.id.player1_row_0);
             p1ScoreBoardText.setTypeface(Typeface.create(p1ScoreBoardText.getTypeface(), Typeface.NORMAL), Typeface.NORMAL);
 
-            TextView p1GamePlayHdrText = (TextView) findViewById(R.id.p1_gameplay_hdr_text);
+            TextView p1GamePlayHdrText = findViewById(R.id.p1_gameplay_hdr_text);
             p1GamePlayHdrText.setTextColor(ContextCompat.getColor(this, R.color.p1GamePlayHdrTextColor));
 
             View p1GamePlayHdrLineView = findViewById(R.id.p1_gameplay_hdr_line);
@@ -594,10 +594,10 @@ public class MainActivity extends AppCompatActivity
             //Reset styles for Player 1 : END
 
             //Reset styles for Player 2 : START
-            TextView p2ScoreBoardText = (TextView) findViewById(R.id.player2_row_1);
+            TextView p2ScoreBoardText = findViewById(R.id.player2_row_1);
             p2ScoreBoardText.setTypeface(Typeface.create(p2ScoreBoardText.getTypeface(), Typeface.NORMAL), Typeface.NORMAL);
 
-            TextView p2GamePlayHdrText = (TextView) findViewById(R.id.p2_gameplay_hdr_text);
+            TextView p2GamePlayHdrText = findViewById(R.id.p2_gameplay_hdr_text);
             p2GamePlayHdrText.setTextColor(ContextCompat.getColor(this, R.color.p2GamePlayHdrTextColor));
 
             View p2GamePlayHdrLineView = findViewById(R.id.p2_gameplay_hdr_line);
