@@ -2,6 +2,48 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="scoreboard_point_text_size">18sp</dimen>
+
+    <!-- Dimension used for LinearLayouts -->
+    <dimen name="linear_layout_weighted_0dp">0dp</dimen>
+
+    <!-- ===================== -->
+    <!-- FOR THE MAIN ACTIVITY -->
+    <!-- ===================== -->
+    <dimen name="scoreboard_table_text_size">18sp</dimen>
     <dimen name="gameplay_player_hdr_text_size">20sp</dimen>
+    <dimen name="match_type_rbtn_grp_content_padding">4dp</dimen>
+    <dimen name="mens_rbtn_margin_left">6dp</dimen>
+    <dimen name="womens_rbtn_margin_right">12dp</dimen>
+    <dimen name="mens_rbtn_margin_right">18dp</dimen>
+    <dimen name="scoreboard_table_cell_margin">5dp</dimen>
+    <dimen name="scoreboard_table_player_label_column_padding_bottom">4dp</dimen>
+    <dimen name="scoreboard_table_player_label_column_padding_left">4dp</dimen>
+    <dimen name="scoreboard_table_player_label_column_padding_right">24dp</dimen>
+    <dimen name="scoreboard_table_player_label_column_padding_top">4dp</dimen>
+    <dimen name="scoreboard_table_points_cell_padding">4dp</dimen>
+    <dimen name="game_score_layout_content_horizontal_padding">4dp</dimen>
+    <dimen name="gameplay_hdr_line_height">4dp</dimen>
+    <dimen name="gameplay_hdr_line_margin_bottom">8dp</dimen>
+    <dimen name="gameplay_hdr_text_padding">4dp</dimen>
+    <dimen name="game_points_text_size">79sp</dimen>
+    <dimen name="game_points_label_margin_top">21dp</dimen>
+    <dimen name="game_score_points_label_padding_left">4dp</dimen>
+    <dimen name="gameplay_points_text_size">72sp</dimen>
+    <dimen name="game_points_label_text_size">20sp</dimen>
+    <dimen name="gameplay_point_label_text_size">16sp</dimen>
+    <dimen name="gameplay_point_label_margin_top">20dp</dimen>
+    <dimen name="tie_break_points_label_text_size">14sp</dimen>
+    <dimen name="tie_break_points_text_size">62sp</dimen>
+    <dimen name="tie_break_points_label_margin_top">18dp</dimen>
+    <dimen name="game_score_columns_divider_width">2dp</dimen>
+    <dimen name="game_score_columns_divider_margin_top">35dp</dimen>
+    <dimen name="plus_btn_layout_margin_bottom">18dp</dimen>
+    <dimen name="plus_btn_height">48dp</dimen>
+    <dimen name="plus_btn_horizontal_margin">22dp</dimen>
+    <dimen name="plus_btn_text_size">16sp</dimen>
+    <dimen name="start_reset_btn_padding">16dp</dimen>
+    <dimen name="start_reset_btn_text_size">16sp</dimen>
+    <dimen name="game_play_text_size">18sp</dimen>
+    <dimen name="game_play_text_margin_bottom">18dp</dimen>
+
 </resources>

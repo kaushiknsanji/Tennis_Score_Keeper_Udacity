@@ -1,3 +1,107 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Name of the App -->
     <string name="app_name">Tennis Scoring</string>
+
+    <!-- ===================================== -->
+    <!-- FOR THE VARIOUS LABELS USED IN THE UI -->
+    <!-- ===================================== -->
+    <string name="label_player_1">Player 1</string>
+    <string name="label_player_2">Player 2</string>
+    <string name="label_mens_rbtn">Men\'s Match</string>
+    <string name="label_womens_rbtn">Women\'s Match</string>
+    <string name="label_game_points">Game\nPoints</string>
+    <string name="label_gameplay_point">Gameplay\nPoint</string>
+    <string name="label_tie_break_points">Tie Break\nPoints</string>
+    <string name="label_plus_btn">+</string>
+    <string name="label_begin_match_btn">Begin Match</string>
+    <string name="label_reset_match_btn">Reset Match</string>
+    <string name="label_restart_match_btn">Restart Match</string>
+
+    <!-- =================================== -->
+    <!-- FOR THE TYPES OF POINTS IN THE GAME -->
+    <!-- =================================== -->
+    <string name="game_set_point_0">0</string>
+    <string name="game_set_point_love">love</string>
+    <string name="gameplay_point_15">15</string>
+    <string name="gameplay_point_30">30</string>
+    <string name="gameplay_point_40">40</string>
+    <string name="gameplay_point_ad">Ad</string>
+    <string name="gameplay_point_60">60</string>
+
+    <!-- ========================= -->
+    <!-- FOR THE GAME PLAY UPDATES -->
+    <!-- ========================= -->
+    <string name="game_play_text_welcome">
+        Welcome to Tennis Scoring App. To begin, please select the Match type at the top and
+        then click the button below.
+    </string>
+    <string name="game_play_text_select_match_type">
+        Please choose the Match type option at the top to begin scoring.
+    </string>
+    <!-- Game Play message shown on toss -->
+    <string name="game_play_text_toss">
+        <!-- Output will be like 'Player - 1 won the toss and has opted to serve.' -->
+        Player - <xliff:g example="1" id="player_#">%1$d</xliff:g> won the toss and has opted to serve.
+    </string>
+    <!-- Game Play message shown on DEUCE -->
+    <string name="game_play_text_deuce">
+        <!-- Output will be like 'Player 1, Set 1 : DEUCE!' -->
+        Player <xliff:g example="1" id="player_#">%1$d</xliff:g>, Set <xliff:g example="1" id="set_#">%2$d</xliff:g> : DEUCE!
+    </string>
+    <!-- Game Play message shown on DEUCE that happens after the first one -->
+    <string name="game_play_text_deuce_repeat">
+        <!-- Output will be like 'Player 1, Set 1 : Back to DEUCE!' -->
+        Player <xliff:g example="1" id="player_#">%1$d</xliff:g>, Set <xliff:g example="1" id="set_#">%2$d</xliff:g> : Back to DEUCE!
+    </string>
+    <!-- Game Play message shown on Advantage -->
+    <string name="game_play_text_advantage">
+        <!-- Output will be like 'Player 1, Set 1 : Advantage Player 1!' -->
+        Player <xliff:g example="1" id="player_#">%1$d</xliff:g>, Set <xliff:g example="1" id="set_#">%2$d</xliff:g> : Advantage Player <xliff:g example="1" id="player_#">%3$d</xliff:g>!
+    </string>
+    <!-- Game Play message shown for each Gameplay point -->
+    <string name="game_play_text_gameplay_point">
+        <!-- Output will be like 'Player 1, Set 1 : 30 - 40' -->
+        Player <xliff:g example="1" id="player_#">%1$d</xliff:g>, Set <xliff:g example="1" id="set_#">%2$d</xliff:g> : <xliff:g example="30" id="player_1_gameplay_point">%3$s</xliff:g> - <xliff:g example="40" id="player_2_gameplay_point">%4$s</xliff:g>
+    </string>
+    <!-- Game Play message shown for each Tiebreaker point -->
+    <string name="game_play_text_tiebreaker_point">
+        <!-- Output will be like 'Player 1, Set 1, Tiebreaker : 4 - 5' -->
+        Player <xliff:g example="1" id="player_#">%1$d</xliff:g>, Set <xliff:g example="1" id="set_#">%2$d</xliff:g>, Tiebreaker : <xliff:g example="4" id="player_1_tiebreak_point">%3$d</xliff:g> - <xliff:g example="5" id="player_2_tiebreak_point">%4$d</xliff:g>
+    </string>
+    <!-- Game Play message shown for each Game point -->
+    <string name="game_play_text_game_point">
+        <!-- Output will be like 'Player 1, Set 1 : 4 - 5' -->
+        Player <xliff:g example="1" id="player_#">%1$d</xliff:g>, Set <xliff:g example="1" id="set_#">%2$d</xliff:g> : <xliff:g example="4" id="player_1_game_point">%3$s</xliff:g> - <xliff:g example="5" id="player_2_game_point">%4$s</xliff:g>
+    </string>
+    <!-- Game Play message shown when a Tiebreaker is started -->
+    <string name="game_play_text_tiebreaker_start">
+        <!-- Output will be like 'Entering Tie Breaker for Set 1, Player 1 to Serve.' -->
+        Entering Tie Breaker for Set <xliff:g example="1" id="set_#">%1$d</xliff:g>, Player <xliff:g example="1" id="player_#">%2$d</xliff:g> to Serve.
+    </string>
+    <!-- Game Play message shown when a Player wins a Set Point that displays the scores of the Set won -->
+    <string name="game_play_text_set_point">
+        <!-- Output will be like 'Game, Set 1, Player 1 : 6 - 4' -->
+        Game, Set <xliff:g example="1" id="set_#">%1$d</xliff:g>, Player <xliff:g example="1" id="player_#">%2$d</xliff:g> : <xliff:g example="6" id="player_1_game_point">%3$s</xliff:g> - <xliff:g example="4" id="player_2_game_point">%4$s</xliff:g>
+    </string>
+    <!-- Game Play message shown when a Player wins a Set Point that displays the current Set points tally -->
+    <string name="game_play_text_next_set">
+        <!-- Output will be like 'Player 1 : 2 - 1, New Set' -->
+        Player <xliff:g example="1" id="player_#">%1$d</xliff:g> : <xliff:g example="2" id="player_1_set_point">%2$s</xliff:g> - <xliff:g example="1" id="player_2_set_point">%3$s</xliff:g>, New Set
+    </string>
+    <!-- Game Play message shown when a Player wins the Match -->
+    <string name="game_play_text_match_point">
+        <!-- Output will be like 'Player 1 defeats Player 2 : 7 - 5, 6 - 4, 7(10) - 6(4)' -->
+        Player <xliff:g example="1" id="player_#">%1$d</xliff:g> defeats Player <xliff:g example="2" id="player_#">%2$d</xliff:g> : <xliff:g example="7 - 5, 6 - 4, 7(10) - 6(4)" id="player_scores">%3$s</xliff:g>
+    </string>
+    <!-- Format for the Game and Gameplay scores -->
+    <string name="game_score_format">
+        <!-- Output will be like '4 - 1' -->
+        <xliff:g example="4" id="player_1_game_points">%1$s</xliff:g> - <xliff:g example="1" id="player_2_game_point">%2$s</xliff:g>
+    </string>
+    <!-- Format for the Game scores with Tiebreaker points -->
+    <string name="game_score_tiebreaker_format">
+        <!-- Output will be like '7(10)' -->
+        <xliff:g example="7" id="player_1_game_points">%1$d</xliff:g>(<xliff:g example="10" id="player_1_tiebreaker_points">%2$d</xliff:g>)
+    </string>
+
 </resources>

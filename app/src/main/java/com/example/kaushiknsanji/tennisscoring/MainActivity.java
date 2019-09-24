@@ -4,7 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -21,8 +21,7 @@ import java.util.Random;
  *
  * @author Kaushik N Sanji
  */
-public class MainActivity extends AppCompatActivity
-        implements GamePlayTextConstantsInterface {
+public class MainActivity extends AppCompatActivity {
 
     //holds the state for the start/reset button of the Scoring app
     private boolean mIsGameStarted = false;
@@ -49,21 +48,60 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<TextView> mP1GamePlayTextList;
     private ArrayList<TextView> mP2GamePlayTextList;
 
+    //Constants used in building up the Game Play Text updates
+    private static final String NEW_LINE = "\n";
+    private static final String COMMA_SPACE = ", ";
+    //Bundle Constants to persist the state on configuration change
+    private static final String BUNDLE_GAME_STARTED_BOOL_KEY = "IsGameStarted";
+    private static final String BUNDLE_MATCH_TYPE_MEN_BOOL_KEY = "IsMatchTypeMen";
+    private static final String BUNDLE_MATCH_TYPE_WOMEN_BOOL_KEY = "IsMatchTypeWomen";
+    private static final String BUNDLE_DEUCE_BOOL_KEY = "IsDeuceGame";
+    private static final String BUNDLE_TIE_BREAKER_ON_BOOL_KEY = "IsTieBreaker";
+    private static final String BUNDLE_PLUS_BUTTON_ENABLED_BOOL_KEY = "IsPlusButtonEnabled";
+    private static final String BUNDLE_PLAYER_TO_SERVE_INT_KEY = "PlayerToServe";
+    private static final String BUNDLE_PLAYER_TO_OPEN_SET_INT_KEY = "PlayerToOpenSet";
+    private static final String BUNDLE_ONGOING_SET_INT_KEY = "OngoingSet";
+    private static final String BUNDLE_TOTAL_SETS_TO_PLAY_INT_KEY = "TotalSetsToPlay";
+    private static final String BUNDLE_TOTAL_SETS_TO_WIN_INT_KEY = "TotalSetsToWin";
+    private static final String BUNDLE_PLAYER_1_SCORE_BOARD_POINTS_PREFIX_KEY = "P1ScoreBoardPointsList_";
+    private static final String BUNDLE_PLAYER_1_GAMEPLAY_SCORES_PREFIX_KEY = "P1GamePlayScoresList_";
+    private static final String BUNDLE_PLAYER_2_SCORE_BOARD_POINTS_PREFIX_KEY = "P2ScoreBoardPointsList_";
+    private static final String BUNDLE_PLAYER_2_GAMEPLAY_SCORES_PREFIX_KEY = "P2GamePlayScoresList_";
+    private static final String BUNDLE_GAMEPLAY_TEXT_KEY = "GamePlayText";
+    private static final String BUNDLE_START_RESET_BUTTON_LABEL_KEY = "StartResetButtonLabel";
+    //Constant for the Point 0
+    private final int mGameSetPointInt0 = 0;
+    //Stores the Types of Points in the Game
+    private String mGameSetPoint0;
+    private String mGameSetPointLove;
+    private String mGamePlayPoint15;
+    private String mGamePlayPoint30;
+    private String mGamePlayPoint40;
+    private String mGamePlayPointAd;
+    private String mGamePlayPoint60;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Reading the types of Points from the Resources
+        mGameSetPoint0 = getString(R.string.game_set_point_0);
+        mGameSetPointLove = getString(R.string.game_set_point_love);
+        mGamePlayPoint15 = getString(R.string.gameplay_point_15);
+        mGamePlayPoint30 = getString(R.string.gameplay_point_30);
+        mGamePlayPoint40 = getString(R.string.gameplay_point_40);
+        mGamePlayPointAd = getString(R.string.gameplay_point_ad);
+        mGamePlayPoint60 = getString(R.string.gameplay_point_60);
+
         if (savedInstanceState == null) {
             //When the activity is loaded for the first time
-
-            Log.i(this.getClass().getSimpleName(), "onCreate: loaded for the first time");
 
             //Hiding the Tie Breaker Score Layout
             toggleTieBreakerLayout(false);
 
             //Update Game play text with the Welcome message
-            updateGamePlayText(WELCOME_MSG_STR);
+            updateGamePlayText(getString(R.string.game_play_text_welcome));
 
             //disabling the plus buttons
             enablePlusButtons(false);
@@ -74,46 +112,44 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.i(this.getClass().getSimpleName(), "onSaveInstanceState: called");
-
         //Adding all the member variables to the bundle : START
-        outState.putBoolean("IsGameStarted", mIsGameStarted);
-        outState.putBoolean("IsMatchTypeMen", mIsMatchTypeMen);
-        outState.putBoolean("IsMatchTypeWomen", mIsMatchTypeWomen);
-        outState.putBoolean("IsDeuceGame", mIsDeuceGame);
-        outState.putBoolean("IsTieBreaker", mIsTieBreaker);
+        outState.putBoolean(BUNDLE_GAME_STARTED_BOOL_KEY, mIsGameStarted);
+        outState.putBoolean(BUNDLE_MATCH_TYPE_MEN_BOOL_KEY, mIsMatchTypeMen);
+        outState.putBoolean(BUNDLE_MATCH_TYPE_WOMEN_BOOL_KEY, mIsMatchTypeWomen);
+        outState.putBoolean(BUNDLE_DEUCE_BOOL_KEY, mIsDeuceGame);
+        outState.putBoolean(BUNDLE_TIE_BREAKER_ON_BOOL_KEY, mIsTieBreaker);
 
-        outState.putInt("PlayerToServe", mPlayerToServe);
-        outState.putInt("PlayerToOpenSet", mPlayerToOpenSet);
-        outState.putInt("CurrentSetPlay", mCurrentSetPlay);
-        outState.putInt("TotalSetsToPlay", mTotalSetsToPlay);
-        outState.putInt("TotalSetsToWin", mTotalSetsToWin);
+        outState.putInt(BUNDLE_PLAYER_TO_SERVE_INT_KEY, mPlayerToServe);
+        outState.putInt(BUNDLE_PLAYER_TO_OPEN_SET_INT_KEY, mPlayerToOpenSet);
+        outState.putInt(BUNDLE_ONGOING_SET_INT_KEY, mCurrentSetPlay);
+        outState.putInt(BUNDLE_TOTAL_SETS_TO_PLAY_INT_KEY, mTotalSetsToPlay);
+        outState.putInt(BUNDLE_TOTAL_SETS_TO_WIN_INT_KEY, mTotalSetsToWin);
 
         if (mIsGameStarted) {
 
             for (int i = 0; i <= mTotalSetsToPlay; i++) {
-                outState.putString("P1ScoreBoardTextList_" + i, mP1ScoreBoardTextList.get(i).getText().toString());
-                outState.putString("P2ScoreBoardTextList_" + i, mP2ScoreBoardTextList.get(i).getText().toString());
+                outState.putString(BUNDLE_PLAYER_1_SCORE_BOARD_POINTS_PREFIX_KEY + i, mP1ScoreBoardTextList.get(i).getText().toString());
+                outState.putString(BUNDLE_PLAYER_2_SCORE_BOARD_POINTS_PREFIX_KEY + i, mP2ScoreBoardTextList.get(i).getText().toString());
             }
 
             for (int i = 0; i < 3; i++) {
-                outState.putString("P1GamePlayTextList_" + i, mP1GamePlayTextList.get(i).getText().toString());
-                outState.putString("P2GamePlayTextList_" + i, mP2GamePlayTextList.get(i).getText().toString());
+                outState.putString(BUNDLE_PLAYER_1_GAMEPLAY_SCORES_PREFIX_KEY + i, mP1GamePlayTextList.get(i).getText().toString());
+                outState.putString(BUNDLE_PLAYER_2_GAMEPLAY_SCORES_PREFIX_KEY + i, mP2GamePlayTextList.get(i).getText().toString());
             }
 
         }
 
         //Saving state of plus buttons
         Button p1PlusButton = findViewById(R.id.p1_plus_btn);
-        outState.putBoolean("IsPlusButtonEnabled", p1PlusButton.isEnabled());
+        outState.putBoolean(BUNDLE_PLUS_BUTTON_ENABLED_BOOL_KEY, p1PlusButton.isEnabled());
 
         //Saving the Game Play Text
         TextView gamePlayTextView = findViewById(R.id.game_play_text);
-        outState.putString("GamePlayText", gamePlayTextView.getText().toString());
+        outState.putString(BUNDLE_GAMEPLAY_TEXT_KEY, gamePlayTextView.getText().toString());
 
         //Saving the Start-Reset Button Text
         Button startResetButton = findViewById(R.id.start_reset_btn);
-        outState.putString("StartResetButtonText", startResetButton.getText().toString());
+        outState.putString(BUNDLE_START_RESET_BUTTON_LABEL_KEY, startResetButton.getText().toString());
 
         //Adding all the member variables to the bundle : END
 
@@ -124,23 +160,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.i(this.getClass().getSimpleName(), "onRestoreInstanceState: called");
-
         //Restoring the state of the view hierarchy through default implementation
         super.onRestoreInstanceState(savedInstanceState);
 
         //Restoring all the member variables from the bundle : START
-        mIsGameStarted = savedInstanceState.getBoolean("IsGameStarted");
-        mIsDeuceGame = savedInstanceState.getBoolean("IsDeuceGame");
-        mIsMatchTypeMen = savedInstanceState.getBoolean("IsMatchTypeMen");
-        mIsMatchTypeWomen = savedInstanceState.getBoolean("IsMatchTypeWomen");
-        mIsTieBreaker = savedInstanceState.getBoolean("IsTieBreaker");
+        mIsGameStarted = savedInstanceState.getBoolean(BUNDLE_GAME_STARTED_BOOL_KEY);
+        mIsDeuceGame = savedInstanceState.getBoolean(BUNDLE_DEUCE_BOOL_KEY);
+        mIsMatchTypeMen = savedInstanceState.getBoolean(BUNDLE_MATCH_TYPE_MEN_BOOL_KEY);
+        mIsMatchTypeWomen = savedInstanceState.getBoolean(BUNDLE_MATCH_TYPE_WOMEN_BOOL_KEY);
+        mIsTieBreaker = savedInstanceState.getBoolean(BUNDLE_TIE_BREAKER_ON_BOOL_KEY);
 
-        mPlayerToServe = savedInstanceState.getInt("PlayerToServe");
-        mPlayerToOpenSet = savedInstanceState.getInt("PlayerToOpenSet");
-        mCurrentSetPlay = savedInstanceState.getInt("CurrentSetPlay");
-        mTotalSetsToPlay = savedInstanceState.getInt("TotalSetsToPlay");
-        mTotalSetsToWin = savedInstanceState.getInt("TotalSetsToWin");
+        mPlayerToServe = savedInstanceState.getInt(BUNDLE_PLAYER_TO_SERVE_INT_KEY);
+        mPlayerToOpenSet = savedInstanceState.getInt(BUNDLE_PLAYER_TO_OPEN_SET_INT_KEY);
+        mCurrentSetPlay = savedInstanceState.getInt(BUNDLE_ONGOING_SET_INT_KEY);
+        mTotalSetsToPlay = savedInstanceState.getInt(BUNDLE_TOTAL_SETS_TO_PLAY_INT_KEY);
+        mTotalSetsToWin = savedInstanceState.getInt(BUNDLE_TOTAL_SETS_TO_WIN_INT_KEY);
 
         //Restoring the state of Match type selection
         RadioGroup matchTypeRadioGroup = findViewById(R.id.match_type_rbtn_grp);
@@ -155,13 +189,13 @@ public class MainActivity extends AppCompatActivity
         }
 
         //Restoring the state of the plus buttons
-        enablePlusButtons(savedInstanceState.getBoolean("IsPlusButtonEnabled"));
+        enablePlusButtons(savedInstanceState.getBoolean(BUNDLE_PLUS_BUTTON_ENABLED_BOOL_KEY));
 
         //Restoring the Game Play Text
-        updateGamePlayText(savedInstanceState.getString("GamePlayText"));
+        updateGamePlayText(savedInstanceState.getString(BUNDLE_GAMEPLAY_TEXT_KEY));
 
         //Restoring the Start-Reset Button Text
-        changeStartResetButtonText(savedInstanceState.getString("StartResetButtonText"));
+        changeStartResetButtonText(savedInstanceState.getString(BUNDLE_START_RESET_BUTTON_LABEL_KEY));
 
         //Restoring the state of Tie-Breaker layout
         toggleTieBreakerLayout(mIsTieBreaker);
@@ -174,17 +208,17 @@ public class MainActivity extends AppCompatActivity
 
             //Restoring the Scoreboard TextViews
             for (int i = 0; i <= mTotalSetsToPlay; i++) {
-                String p1ScoreStr = savedInstanceState.getString("P1ScoreBoardTextList_" + i, "0");
+                String p1ScoreStr = savedInstanceState.getString(BUNDLE_PLAYER_1_SCORE_BOARD_POINTS_PREFIX_KEY + i, mGameSetPoint0);
                 mP1ScoreBoardTextList.get(i).setText(p1ScoreStr);
-                String p2ScoreStr = savedInstanceState.getString("P2ScoreBoardTextList_" + i, "0");
+                String p2ScoreStr = savedInstanceState.getString(BUNDLE_PLAYER_2_SCORE_BOARD_POINTS_PREFIX_KEY + i, mGameSetPoint0);
                 mP2ScoreBoardTextList.get(i).setText(p2ScoreStr);
             }
 
             //Restoring the GamePlay Scoreboard TextViews
             for (int i = 0; i < 3; i++) {
-                String p1ScoreStr = savedInstanceState.getString("P1GamePlayTextList_" + i, "0");
+                String p1ScoreStr = savedInstanceState.getString(BUNDLE_PLAYER_1_GAMEPLAY_SCORES_PREFIX_KEY + i, mGameSetPoint0);
                 mP1GamePlayTextList.get(i).setText(p1ScoreStr);
-                String p2ScoreStr = savedInstanceState.getString("P2GamePlayTextList_" + i, "0");
+                String p2ScoreStr = savedInstanceState.getString(BUNDLE_PLAYER_2_GAMEPLAY_SCORES_PREFIX_KEY + i, mGameSetPoint0);
                 mP2GamePlayTextList.get(i).setText(p2ScoreStr);
             }
 
@@ -312,10 +346,10 @@ public class MainActivity extends AppCompatActivity
             toggleTieBreakerLayout(false);
 
             //Changing the Text on the Start/Reset Button
-            changeStartResetButtonText("Begin Match");
+            changeStartResetButtonText(getString(R.string.label_begin_match_btn));
 
             //Updating Game Play Text
-            updateGamePlayText(WELCOME_MSG_STR);
+            updateGamePlayText(getString(R.string.game_play_text_welcome));
 
             //defaulting parameters
             mIsGameStarted = false;
@@ -346,12 +380,12 @@ public class MainActivity extends AppCompatActivity
             //disabling the plus buttons
             enablePlusButtons(false);
 
-        } else if (!mIsGameStarted) {
+        } else {
             //Button pressed when match was not started, to begin the match
 
             if (!mIsMatchTypeMen && !mIsMatchTypeWomen) {
                 //When Match Type selection is not yet done, display a suitable message
-                updateGamePlayText(NO_MATCH_TYPE_SELECTED_STR);
+                updateGamePlayText(getString(R.string.game_play_text_select_match_type));
             } else {
                 //When Match Type selection is done
 
@@ -363,13 +397,13 @@ public class MainActivity extends AppCompatActivity
                 setActivePlayerAttr();
 
                 //updating the Game play text
-                updateGamePlayText(String.format(TOSS_MSG_STR, mPlayerToOpenSet));
+                updateGamePlayText(getString(R.string.game_play_text_toss, mPlayerToOpenSet));
 
                 //disabling the Match Type Radio button group
                 enableMatchTypeRadioGrp(false);
 
                 //Changing the Text on the Start/Reset Button
-                changeStartResetButtonText("Reset Match");
+                changeStartResetButtonText(getString(R.string.label_reset_match_btn));
 
                 //Initializing the ArrayLists to save the scores
                 initScoreArrayLists();
@@ -412,7 +446,7 @@ public class MainActivity extends AppCompatActivity
         TextView gamePlayTextView = findViewById(R.id.game_play_text);
         if (append) {
             //When the text is to be appended to existing text
-            gamePlayTextView.setText(gamePlayTextView.getText().toString() + "\n" + message);
+            gamePlayTextView.setText(TextUtils.concat(gamePlayTextView.getText().toString(), NEW_LINE, message));
         } else {
             //When the text need not be appended to existing text
             gamePlayTextView.setText(message);
@@ -616,22 +650,22 @@ public class MainActivity extends AppCompatActivity
      */
     private String getNextGamePlayPoint(String currentPointStr) {
 
-        if (currentPointStr.equals("0")) {
-            return "15";
-        } else if (currentPointStr.equals("15")) {
-            return "30";
-        } else if (currentPointStr.equals("30")) {
-            return "40";
-        } else if (currentPointStr.equals("40") && mIsDeuceGame) {
-            return "Ad";
-        } else if (currentPointStr.equals("40") && !mIsDeuceGame) {
-            return "60";
-        } else if (currentPointStr.equals("Ad")) {
+        if (currentPointStr.equals(mGameSetPoint0)) {
+            return mGamePlayPoint15;
+        } else if (currentPointStr.equals(mGamePlayPoint15)) {
+            return mGamePlayPoint30;
+        } else if (currentPointStr.equals(mGamePlayPoint30)) {
+            return mGamePlayPoint40;
+        } else if (currentPointStr.equals(mGamePlayPoint40) && mIsDeuceGame) {
+            return mGamePlayPointAd;
+        } else if (currentPointStr.equals(mGamePlayPoint40)) {
+            return mGamePlayPoint60;
+        } else if (currentPointStr.equals(mGamePlayPointAd)) {
             mIsDeuceGame = false; //Updating to false as Advantage is won by the player
-            return "60";
+            return mGamePlayPoint60;
         }
 
-        return "0"; //Returning 0 by default
+        return mGameSetPoint0; //Returning 0 by default
     }
 
     /**
@@ -656,12 +690,12 @@ public class MainActivity extends AppCompatActivity
             switch (view.getId()) {
                 case R.id.p1_plus_btn:
                     String p1NextPointStr = getNextGamePlayPoint(p1CurrentGamePlayPoint);
-                    if (p1NextPointStr.equals("60")) {
+                    if (p1NextPointStr.equals(mGamePlayPoint60)) {
                         //If the player reaches 60 Game Play point, then the player wins the Game
 
                         //Resetting Game Play points to 0 for both players
-                        p1GamePlayTextView.setText("0");
-                        p2GamePlayTextView.setText("0");
+                        p1GamePlayTextView.setText(mGameSetPoint0);
+                        p2GamePlayTextView.setText(mGameSetPoint0);
 
                         //Highlighting the player who serves next
                         mPlayerToServe = (mPlayerToServe % 2) + 1;
@@ -670,7 +704,7 @@ public class MainActivity extends AppCompatActivity
                         //Calling method to update the Game point for Player 1
                         updateGamePoints(1);
 
-                    } else if (p1NextPointStr.equals("40")
+                    } else if (p1NextPointStr.equals(mGamePlayPoint40)
                             && p1NextPointStr.equals(p2CurrentGamePlayPoint)) {
                         //If both players are at 40 each, then it is Deuce
 
@@ -681,33 +715,33 @@ public class MainActivity extends AppCompatActivity
                         p1GamePlayTextView.setText(p1NextPointStr);
 
                         //Updating the Game play text
-                        updateGamePlayText(String.format(DEUCE_MSG_STR, mPlayerToServe, mCurrentSetPlay));
+                        updateGamePlayText(getString(R.string.game_play_text_deuce, mPlayerToServe, mCurrentSetPlay));
 
-                    } else if (p1NextPointStr.equals("Ad")
+                    } else if (p1NextPointStr.equals(mGamePlayPointAd)
                             && p1NextPointStr.equals(p2CurrentGamePlayPoint)) {
                         //If Player 1 gains Advantage when Player 2 was in Advantage, then it is back to Deuce
 
                         //Resetting Game Play points to 40 for both players
-                        p1GamePlayTextView.setText("40");
-                        p2GamePlayTextView.setText("40");
+                        p1GamePlayTextView.setText(mGamePlayPoint40);
+                        p2GamePlayTextView.setText(mGamePlayPoint40);
 
                         //Updating the Game play text
-                        updateGamePlayText(String.format(DEUCE_REPEAT_MSG_STR, mPlayerToServe, mCurrentSetPlay));
+                        updateGamePlayText(getString(R.string.game_play_text_deuce_repeat, mPlayerToServe, mCurrentSetPlay));
 
                     } else {
                         //In other cases, just update the Game Play point for Player 1
                         p1GamePlayTextView.setText(p1NextPointStr);
 
                         //Updating the Game play text
-                        if (p1NextPointStr.equals("Ad")) {
+                        if (p1NextPointStr.equals(mGamePlayPointAd)) {
                             //If Player 1 wins the Advantage
-                            updateGamePlayText(String.format(ADV_PLAYER_MSG_STR, mPlayerToServe, mCurrentSetPlay, 1));
+                            updateGamePlayText(getString(R.string.game_play_text_advantage, mPlayerToServe, mCurrentSetPlay, 1));
                         } else {
                             //For all other points
                             if (mPlayerToServe == 1) {
-                                updateGamePlayText(String.format(GAMEPLAY_POINT_MSG_STR, mPlayerToServe, mCurrentSetPlay, p1NextPointStr, (p2CurrentGamePlayPoint.equals("0")) ? "love" : p2CurrentGamePlayPoint));
+                                updateGamePlayText(getString(R.string.game_play_text_gameplay_point, mPlayerToServe, mCurrentSetPlay, p1NextPointStr, (p2CurrentGamePlayPoint.equals(mGameSetPoint0)) ? mGameSetPointLove : p2CurrentGamePlayPoint));
                             } else if (mPlayerToServe == 2) {
-                                updateGamePlayText(String.format(GAMEPLAY_POINT_MSG_STR, mPlayerToServe, mCurrentSetPlay, (p2CurrentGamePlayPoint.equals("0")) ? "love" : p2CurrentGamePlayPoint, p1NextPointStr));
+                                updateGamePlayText(getString(R.string.game_play_text_gameplay_point, mPlayerToServe, mCurrentSetPlay, (p2CurrentGamePlayPoint.equals(mGameSetPoint0)) ? mGameSetPointLove : p2CurrentGamePlayPoint, p1NextPointStr));
                             }
                         }
                     }
@@ -715,12 +749,12 @@ public class MainActivity extends AppCompatActivity
 
                 case R.id.p2_plus_btn:
                     String p2NextPointStr = getNextGamePlayPoint(p2CurrentGamePlayPoint);
-                    if (p2NextPointStr.equals("60")) {
+                    if (p2NextPointStr.equals(mGamePlayPoint60)) {
                         //If the player reaches 60 Game Play point, then the player wins the Game
 
                         //Resetting Game Play points to 0 for both players
-                        p2GamePlayTextView.setText("0");
-                        p1GamePlayTextView.setText("0");
+                        p2GamePlayTextView.setText(mGameSetPoint0);
+                        p1GamePlayTextView.setText(mGameSetPoint0);
 
                         //Highlighting the player who serves next
                         mPlayerToServe = (mPlayerToServe % 2) + 1;
@@ -729,7 +763,7 @@ public class MainActivity extends AppCompatActivity
                         //Calling method to update the Game point for Player 2
                         updateGamePoints(2);
 
-                    } else if (p2NextPointStr.equals("40")
+                    } else if (p2NextPointStr.equals(mGamePlayPoint40)
                             && p2NextPointStr.equals(p1CurrentGamePlayPoint)) {
                         //If both players are at 40 each, then it is Deuce
 
@@ -740,33 +774,33 @@ public class MainActivity extends AppCompatActivity
                         p2GamePlayTextView.setText(p2NextPointStr);
 
                         //Updating the Game play text
-                        updateGamePlayText(String.format(DEUCE_MSG_STR, mPlayerToServe, mCurrentSetPlay));
+                        updateGamePlayText(getString(R.string.game_play_text_deuce, mPlayerToServe, mCurrentSetPlay));
 
-                    } else if (p2NextPointStr.equals("Ad")
+                    } else if (p2NextPointStr.equals(mGamePlayPointAd)
                             && p2NextPointStr.equals(p1CurrentGamePlayPoint)) {
                         //If Player 2 gains Advantage when Player 1 was in Advantage, then it is back to Deuce
 
                         //Resetting Game Play points to 40 for both players
-                        p2GamePlayTextView.setText("40");
-                        p1GamePlayTextView.setText("40");
+                        p2GamePlayTextView.setText(mGamePlayPoint40);
+                        p1GamePlayTextView.setText(mGamePlayPoint40);
 
                         //updating the Game play text
-                        updateGamePlayText(String.format(DEUCE_REPEAT_MSG_STR, mPlayerToServe, mCurrentSetPlay));
+                        updateGamePlayText(getString(R.string.game_play_text_deuce_repeat, mPlayerToServe, mCurrentSetPlay));
 
                     } else {
                         //In other cases, just update the Game Play point for Player 2
                         p2GamePlayTextView.setText(p2NextPointStr);
 
                         //Updating the Game play text
-                        if (p2NextPointStr.equals("Ad")) {
+                        if (p2NextPointStr.equals(mGamePlayPointAd)) {
                             //If Player 2 wins the Advantage
-                            updateGamePlayText(String.format(ADV_PLAYER_MSG_STR, mPlayerToServe, mCurrentSetPlay, 2));
+                            updateGamePlayText(getString(R.string.game_play_text_advantage, mPlayerToServe, mCurrentSetPlay, 2));
                         } else {
                             //For all other points
                             if (mPlayerToServe == 2) {
-                                updateGamePlayText(String.format(GAMEPLAY_POINT_MSG_STR, mPlayerToServe, mCurrentSetPlay, p2NextPointStr, (p1CurrentGamePlayPoint.equals("0")) ? "love" : p1CurrentGamePlayPoint));
+                                updateGamePlayText(getString(R.string.game_play_text_gameplay_point, mPlayerToServe, mCurrentSetPlay, p2NextPointStr, (p1CurrentGamePlayPoint.equals(mGameSetPoint0)) ? mGameSetPointLove : p1CurrentGamePlayPoint));
                             } else if (mPlayerToServe == 1) {
-                                updateGamePlayText(String.format(GAMEPLAY_POINT_MSG_STR, mPlayerToServe, mCurrentSetPlay, (p1CurrentGamePlayPoint.equals("0")) ? "love" : p1CurrentGamePlayPoint, p2NextPointStr));
+                                updateGamePlayText(getString(R.string.game_play_text_gameplay_point, mPlayerToServe, mCurrentSetPlay, (p1CurrentGamePlayPoint.equals(mGameSetPoint0)) ? mGameSetPointLove : p1CurrentGamePlayPoint, p2NextPointStr));
                             }
                         }
                     }
@@ -774,7 +808,7 @@ public class MainActivity extends AppCompatActivity
 
             }
 
-        } else if (mIsTieBreaker) {
+        } else {
             //When the current game is a Tie Breaker game
 
             TextView p1GamePointTextView = mP1GamePlayTextList.get(0);
@@ -801,13 +835,13 @@ public class MainActivity extends AppCompatActivity
                     p1TieBreakerPoints += 1;
                     p1GamePlayTextView.setText(String.valueOf(p1TieBreakerPoints));
                     //Updating Scoreboard of Player - 1
-                    currentSetP1ScoreboardTextView.setText(String.format("%d(%d)", p1GamePoints, p1TieBreakerPoints));
+                    currentSetP1ScoreboardTextView.setText(getString(R.string.game_score_tiebreaker_format, p1GamePoints, p1TieBreakerPoints));
                     break;
                 case R.id.p2_plus_btn:
                     p2TieBreakerPoints += 1;
                     p2GamePlayTextView.setText(String.valueOf(p2TieBreakerPoints));
                     //Updating Scoreboard of Player - 2
-                    currentSetP2ScoreboardTextView.setText(String.format("%d(%d)", p2GamePoints, p2TieBreakerPoints));
+                    currentSetP2ScoreboardTextView.setText(getString(R.string.game_score_tiebreaker_format, p2GamePoints, p2TieBreakerPoints));
                     break;
             }
             //Updating the corresponding Player's Tie Breaker point : END
@@ -823,11 +857,11 @@ public class MainActivity extends AppCompatActivity
 
             //Updating the Game play text
             if (mPlayerToServe == 1) {
-                updateGamePlayText(String.format(TIEBREAKER_POINT_MSG_STR, mPlayerToServe, mCurrentSetPlay,
-                        (p1TieBreakerPoints == 0) ? "love" : String.valueOf(p1TieBreakerPoints), (p2TieBreakerPoints == 0) ? "love" : String.valueOf(p2TieBreakerPoints)));
+                updateGamePlayText(getString(R.string.game_play_text_tiebreaker_point, mPlayerToServe, mCurrentSetPlay,
+                        p1TieBreakerPoints, p2TieBreakerPoints));
             } else if (mPlayerToServe == 2) {
-                updateGamePlayText(String.format(TIEBREAKER_POINT_MSG_STR, mPlayerToServe, mCurrentSetPlay,
-                        (p2TieBreakerPoints == 0) ? "love" : String.valueOf(p2TieBreakerPoints), (p1TieBreakerPoints == 0) ? "love" : String.valueOf(p1TieBreakerPoints)));
+                updateGamePlayText(getString(R.string.game_play_text_tiebreaker_point, mPlayerToServe, mCurrentSetPlay,
+                        p2TieBreakerPoints, p1TieBreakerPoints));
             }
 
             //Evaluating the difference in Tie Breaker points of the current game between the players
@@ -844,7 +878,7 @@ public class MainActivity extends AppCompatActivity
                     //Updating Game Points of Player - 1
                     p1GamePointTextView.setText(String.valueOf(++p1GamePoints));
                     //Updating Scoreboard of Player - 1
-                    currentSetP1ScoreboardTextView.setText(String.format("%d(%d)", p1GamePoints, p1TieBreakerPoints));
+                    currentSetP1ScoreboardTextView.setText(getString(R.string.game_score_tiebreaker_format, p1GamePoints, p1TieBreakerPoints));
                     //Updating Set Points of Player - 1
                     updateSetPoints(1);
 
@@ -853,7 +887,7 @@ public class MainActivity extends AppCompatActivity
                     //Updating Game Points of Player - 2
                     p2GamePointTextView.setText(String.valueOf(++p2GamePoints));
                     //Updating Scoreboard of Player - 2
-                    currentSetP2ScoreboardTextView.setText(String.format("%d(%d)", p2GamePoints, p2TieBreakerPoints));
+                    currentSetP2ScoreboardTextView.setText(getString(R.string.game_score_tiebreaker_format, p2GamePoints, p2TieBreakerPoints));
                     //Updating Set Points of Player - 2
                     updateSetPoints(2);
                 }
@@ -899,11 +933,11 @@ public class MainActivity extends AppCompatActivity
 
         //Updating the Game play text
         if (mPlayerToServe == 1) {
-            updateGamePlayText(String.format(GAME_POINT_MSG_STR, mPlayerToServe, mCurrentSetPlay,
-                    (p1GamePoints == 0) ? "love" : String.valueOf(p1GamePoints), (p2GamePoints == 0) ? "love" : String.valueOf(p2GamePoints)));
+            updateGamePlayText(getString(R.string.game_play_text_game_point, mPlayerToServe, mCurrentSetPlay,
+                    (p1GamePoints == mGameSetPointInt0) ? mGameSetPointLove : String.valueOf(p1GamePoints), (p2GamePoints == mGameSetPointInt0) ? mGameSetPointLove : String.valueOf(p2GamePoints)));
         } else if (mPlayerToServe == 2) {
-            updateGamePlayText(String.format(GAME_POINT_MSG_STR, mPlayerToServe, mCurrentSetPlay,
-                    (p2GamePoints == 0) ? "love" : String.valueOf(p2GamePoints), (p1GamePoints == 0) ? "love" : String.valueOf(p1GamePoints)));
+            updateGamePlayText(getString(R.string.game_play_text_game_point, mPlayerToServe, mCurrentSetPlay,
+                    (p2GamePoints == mGameSetPointInt0) ? mGameSetPointLove : String.valueOf(p2GamePoints), (p1GamePoints == mGameSetPointInt0) ? mGameSetPointLove : String.valueOf(p1GamePoints)));
         }
 
         //Evaluating the difference in Game points of the current set between the players
@@ -936,11 +970,11 @@ public class MainActivity extends AppCompatActivity
                 toggleTieBreakerLayout(true);
 
                 //Updating the Game play text
-                updateGamePlayText(String.format(TIEBREAKER_START_MSG_STR, mCurrentSetPlay, mPlayerToServe), true);
+                updateGamePlayText(getString(R.string.game_play_text_tiebreaker_start, mCurrentSetPlay, mPlayerToServe), true);
             }
 
 
-        } else if (mCurrentSetPlay == mTotalSetsToPlay) {
+        } else {
             //When the current Set is the last Set of the Match (Advantage Set)
 
             if (maxPointsReached >= 6 && gamePointDifference >= 2) {
@@ -999,10 +1033,10 @@ public class MainActivity extends AppCompatActivity
         //Updating the Game Play text
         if (player == 1) {
             //When Player 1 wins the Set
-            updateGamePlayText(String.format(SET_POINT_MSG_STR, mCurrentSetPlay, player, p1GamePointStr, p2GamePointStr), true);
+            updateGamePlayText(getString(R.string.game_play_text_set_point, mCurrentSetPlay, player, p1GamePointStr, p2GamePointStr), true);
         } else if (player == 2) {
             //When Player 2 wins the Set
-            updateGamePlayText(String.format(SET_POINT_MSG_STR, mCurrentSetPlay, player, p2GamePointStr, p1GamePointStr), true);
+            updateGamePlayText(getString(R.string.game_play_text_set_point, mCurrentSetPlay, player, p2GamePointStr, p1GamePointStr), true);
         }
 
         //Evaluating the Max Set points reached by either of the player in the Match
@@ -1015,19 +1049,19 @@ public class MainActivity extends AppCompatActivity
             if (p1TotalSetPts == maxPointsReached) {
                 //When Player -1 has won the match
 
-                updateGamePlayText(String.format(MATCH_POINT_MSG_STR, 1, 2, getMatchScore(1)), true);
+                updateGamePlayText(getString(R.string.game_play_text_match_point, 1, 2, getMatchScore(1)), true);
 
             } else if (p2TotalSetPts == maxPointsReached) {
                 //When Player -2 has won the match
 
-                updateGamePlayText(String.format(MATCH_POINT_MSG_STR, 2, 1, getMatchScore(2)), true);
+                updateGamePlayText(getString(R.string.game_play_text_match_point, 2, 1, getMatchScore(2)), true);
             }
 
             //Disabling the plus buttons as the Match is over
             enablePlusButtons(false);
 
             //Changing the Text on the Start/Reset Button
-            changeStartResetButtonText("Restart Match");
+            changeStartResetButtonText(getString(R.string.label_restart_match_btn));
 
         } else if (maxPointsReached < mTotalSetsToWin) {
             //If deciding number of sets has not been won yet, then advance to next set
@@ -1055,11 +1089,11 @@ public class MainActivity extends AppCompatActivity
 
             //Updating the Game Play text for Next Set
             if (mPlayerToServe == 1) {
-                updateGamePlayText(String.format(NEXT_SET_MSG_STR, mPlayerToServe,
-                        (p1TotalSetPts == 0) ? "love" : String.valueOf(p1TotalSetPts), (p2TotalSetPts == 0) ? "love" : String.valueOf(p2TotalSetPts)), true);
+                updateGamePlayText(getString(R.string.game_play_text_next_set, mPlayerToServe,
+                        (p1TotalSetPts == mGameSetPointInt0) ? mGameSetPointLove : String.valueOf(p1TotalSetPts), (p2TotalSetPts == mGameSetPointInt0) ? mGameSetPointLove : String.valueOf(p2TotalSetPts)), true);
             } else if (mPlayerToServe == 2) {
-                updateGamePlayText(String.format(NEXT_SET_MSG_STR, mPlayerToServe,
-                        (p2TotalSetPts == 0) ? "love" : String.valueOf(p2TotalSetPts), (p1TotalSetPts == 0) ? "love" : String.valueOf(p1TotalSetPts)), true);
+                updateGamePlayText(getString(R.string.game_play_text_next_set, mPlayerToServe,
+                        (p2TotalSetPts == mGameSetPointInt0) ? mGameSetPointLove : String.valueOf(p2TotalSetPts), (p1TotalSetPts == mGameSetPointInt0) ? mGameSetPointLove : String.valueOf(p1TotalSetPts)), true);
             }
         }
 
@@ -1074,12 +1108,12 @@ public class MainActivity extends AppCompatActivity
 
         //Resetting Player - 1 Game play scores
         for (TextView gamePlayTextView : mP1GamePlayTextList) {
-            gamePlayTextView.setText(String.valueOf(0));
+            gamePlayTextView.setText(mGameSetPoint0);
         }
 
         //Resetting Player - 2 Game play scores
         for (TextView gamePlayTextView : mP2GamePlayTextList) {
-            gamePlayTextView.setText(String.valueOf(0));
+            gamePlayTextView.setText(mGameSetPoint0);
         }
 
     }
@@ -1092,12 +1126,12 @@ public class MainActivity extends AppCompatActivity
 
         //Resetting Player - 1 Scoreboard scores
         for (TextView scoreboardTextView : mP1ScoreBoardTextList) {
-            scoreboardTextView.setText(String.valueOf(0));
+            scoreboardTextView.setText(mGameSetPoint0);
         }
 
         //Resetting Player - 2 Scoreboard scores
         for (TextView scoreboardTextView : mP2ScoreBoardTextList) {
-            scoreboardTextView.setText(String.valueOf(0));
+            scoreboardTextView.setText(mGameSetPoint0);
         }
 
     }
@@ -1119,15 +1153,15 @@ public class MainActivity extends AppCompatActivity
 
             if (player == 1) {
                 //When Player 1 has won the Match
-                scoreBuilder.append(String.format("%s - %s", p1CurrentIndexSetTextView.getText().toString(), p2CurrentIndexSetTextView.getText().toString()));
+                scoreBuilder.append(getString(R.string.game_score_format, p1CurrentIndexSetTextView.getText().toString(), p2CurrentIndexSetTextView.getText().toString()));
             } else if (player == 2) {
                 //When Player 2 has won the Match
-                scoreBuilder.append(String.format("%s - %s", p2CurrentIndexSetTextView.getText().toString(), p1CurrentIndexSetTextView.getText().toString()));
+                scoreBuilder.append(getString(R.string.game_score_format, p2CurrentIndexSetTextView.getText().toString(), p1CurrentIndexSetTextView.getText().toString()));
             }
 
             if (index < mCurrentSetPlay) {
                 //Appending comma separator after each set scores
-                scoreBuilder.append(", ");
+                scoreBuilder.append(COMMA_SPACE);
             }
         }
 
