@@ -253,16 +253,27 @@ public class MainActivity extends AppCompatActivity {
      */
     private void toggleTieBreakerLayout(boolean visibilityState) {
         View p1TieBreakerLayout = findViewById(R.id.p1_tie_breaker_game_layout);
+        View p1GamePlayPointsLayout = findViewById(R.id.p1_gameplay_pts_layout);
         View p2TieBreakerLayout = findViewById(R.id.p2_tie_breaker_game_layout);
+        View p2GamePlayPointsLayout = findViewById(R.id.p2_gameplay_pts_layout);
 
         if (visibilityState) {
             //If boolean passed is true, then enable the tie breaker layouts
             p1TieBreakerLayout.setVisibility(View.VISIBLE);
             p2TieBreakerLayout.setVisibility(View.VISIBLE);
+
+            //Hide the GamePlay Points layout as it is not required during a Tie-Breaker
+            p1GamePlayPointsLayout.setVisibility(View.GONE);
+            p2GamePlayPointsLayout.setVisibility(View.GONE);
+
         } else {
             //If boolean passed is false, then hide the tie breaker layouts
             p1TieBreakerLayout.setVisibility(View.GONE);
             p2TieBreakerLayout.setVisibility(View.GONE);
+
+            //Show the GamePlay Points layout
+            p1GamePlayPointsLayout.setVisibility(View.VISIBLE);
+            p2GamePlayPointsLayout.setVisibility(View.VISIBLE);
         }
 
     }
