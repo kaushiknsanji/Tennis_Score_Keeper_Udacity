@@ -323,7 +323,6 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:maxLines="1"
-                        android:scrollHorizontally="true"
                         android:text="@string/game_set_point_0"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/game_points_text_size" />
@@ -348,19 +347,22 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/p1_gameplay_pts_text"
                         android:layout_width="@dimen/linear_layout_weighted_0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
                         android:maxLines="1"
-                        android:scrollHorizontally="true"
                         android:text="@string/game_set_point_0"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/gameplay_points_text_size" />
+                        android:textSize="@dimen/gameplay_points_text_size"
+                        app:autoSizeMaxTextSize="@dimen/gameplay_points_text_size"
+                        app:autoSizeMinTextSize="@dimen/gameplay_points_min_text_size"
+                        app:autoSizeStepGranularity="@dimen/gameplay_points_text_step_granularity"
+                        app:autoSizeTextType="uniform" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:layout_width="@dimen/linear_layout_weighted_0dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/gameplay_point_label_margin_top"
@@ -370,7 +372,11 @@
                         android:paddingLeft="@dimen/game_score_points_label_padding_left"
                         android:text="@string/label_gameplay_point"
                         android:textAllCaps="true"
+                        app:autoSizeMaxTextSize="@dimen/gameplay_point_label_text_size"
                         android:textSize="@dimen/gameplay_point_label_text_size"
+                        app:autoSizeMinTextSize="@dimen/gameplay_point_label_min_text_size"
+                        app:autoSizeStepGranularity="@dimen/gameplay_point_label_text_step_granularity"
+                        app:autoSizeTextType="uniform"
                         app:fontFamily="sans-serif-condensed" />
 
                 </LinearLayout>
@@ -381,19 +387,22 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/p1_tb_pts_text"
                         android:layout_width="@dimen/linear_layout_weighted_0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
                         android:maxLines="1"
-                        android:scrollHorizontally="true"
                         android:text="@string/game_set_point_0"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/tie_break_points_text_size" />
+                        android:textSize="@dimen/tie_break_points_text_size"
+                        app:autoSizeMaxTextSize="@dimen/tie_break_points_text_size"
+                        app:autoSizeMinTextSize="@dimen/tie_break_points_min_text_size"
+                        app:autoSizeStepGranularity="@dimen/tie_break_points_text_step_granularity"
+                        app:autoSizeTextType="uniform" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:layout_width="@dimen/linear_layout_weighted_0dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/tie_break_points_label_margin_top"
@@ -403,7 +412,11 @@
                         android:paddingLeft="@dimen/game_score_points_label_padding_left"
                         android:text="@string/label_tie_break_points"
                         android:textAllCaps="true"
-                        android:textSize="@dimen/tie_break_points_label_text_size" />
+                        android:textSize="@dimen/tie_break_points_label_text_size"
+                        app:autoSizeMaxTextSize="@dimen/tie_break_points_label_text_size"
+                        app:autoSizeMinTextSize="@dimen/tie_break_points_label_min_text_size"
+                        app:autoSizeStepGranularity="@dimen/tie_break_points_label_text_step_granularity"
+                        app:autoSizeTextType="uniform" />
 
                 </LinearLayout>
 
@@ -463,7 +476,6 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:maxLines="1"
-                        android:scrollHorizontally="true"
                         android:text="@string/game_set_point_0"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/game_points_text_size" />
@@ -488,19 +500,22 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/p2_gameplay_pts_text"
                         android:layout_width="@dimen/linear_layout_weighted_0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
                         android:maxLines="1"
-                        android:scrollHorizontally="true"
                         android:text="@string/game_set_point_0"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/gameplay_points_text_size" />
+                        android:textSize="@dimen/gameplay_points_text_size"
+                        app:autoSizeMaxTextSize="@dimen/gameplay_points_text_size"
+                        app:autoSizeMinTextSize="@dimen/gameplay_points_min_text_size"
+                        app:autoSizeStepGranularity="@dimen/gameplay_points_text_step_granularity"
+                        app:autoSizeTextType="uniform" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:layout_width="@dimen/linear_layout_weighted_0dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/gameplay_point_label_margin_top"
@@ -510,7 +525,11 @@
                         android:paddingLeft="@dimen/game_score_points_label_padding_left"
                         android:text="@string/label_gameplay_point"
                         android:textAllCaps="true"
+                        app:autoSizeMaxTextSize="@dimen/gameplay_point_label_text_size"
                         android:textSize="@dimen/gameplay_point_label_text_size"
+                        app:autoSizeMinTextSize="@dimen/gameplay_point_label_min_text_size"
+                        app:autoSizeStepGranularity="@dimen/gameplay_point_label_text_step_granularity"
+                        app:autoSizeTextType="uniform"
                         app:fontFamily="sans-serif-condensed" />
 
                 </LinearLayout>
@@ -521,19 +540,22 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/p2_tb_pts_text"
                         android:layout_width="@dimen/linear_layout_weighted_0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
                         android:maxLines="1"
-                        android:scrollHorizontally="true"
                         android:text="@string/game_set_point_0"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/tie_break_points_text_size" />
+                        android:textSize="@dimen/tie_break_points_text_size"
+                        app:autoSizeMaxTextSize="@dimen/tie_break_points_text_size"
+                        app:autoSizeMinTextSize="@dimen/tie_break_points_min_text_size"
+                        app:autoSizeStepGranularity="@dimen/tie_break_points_text_step_granularity"
+                        app:autoSizeTextType="uniform" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:layout_width="@dimen/linear_layout_weighted_0dp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/tie_break_points_label_margin_top"
@@ -543,7 +565,11 @@
                         android:paddingLeft="@dimen/game_score_points_label_padding_left"
                         android:text="@string/label_tie_break_points"
                         android:textAllCaps="true"
-                        android:textSize="@dimen/tie_break_points_label_text_size" />
+                        android:textSize="@dimen/tie_break_points_label_text_size"
+                        app:autoSizeMaxTextSize="@dimen/tie_break_points_label_text_size"
+                        app:autoSizeMinTextSize="@dimen/tie_break_points_label_min_text_size"
+                        app:autoSizeStepGranularity="@dimen/tie_break_points_label_text_step_granularity"
+                        app:autoSizeTextType="uniform" />
 
                 </LinearLayout>
 
