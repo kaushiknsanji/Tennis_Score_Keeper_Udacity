@@ -1,7 +1,7 @@
 # Tennis Scoring - Score Keeper App
 
 ![GitHub](https://img.shields.io/github/license/kaushiknsanji/Tennis_Score_Keeper_Udacity)  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kaushiknsanji/Tennis_Score_Keeper_Udacity)  ![GitHub repo size](https://img.shields.io/github/repo-size/kaushiknsanji/Tennis_Score_Keeper_Udacity)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/kaushiknsanji/Tennis_Score_Keeper_Udacity)  ![GitHub All Releases](https://img.shields.io/github/downloads/kaushiknsanji/Tennis_Score_Keeper_Udacity/total) ![GitHub search hit counter](https://img.shields.io/github/search/kaushiknsanji/Tennis_Score_Keeper_Udacity/Score%20Keeper%20App) ![Minimum API level](https://img.shields.io/badge/API-15-yellow)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/kaushiknsanji/Tennis_Score_Keeper_Udacity)  ![GitHub All Releases](https://img.shields.io/github/downloads/kaushiknsanji/Tennis_Score_Keeper_Udacity/total) ![GitHub search hit counter](https://img.shields.io/github/search/kaushiknsanji/Tennis_Score_Keeper_Udacity/Score%20Keeper%20App) ![Minimum API level](https://img.shields.io/badge/API-15+-yellow)
 
 This App has been developed as part of the **Udacity Android Basics Nanodegree Course** for the Exercise Project **"Score Keeper App"**. **Tennis** is the game chosen for the App.
 
