@@ -75,6 +75,15 @@ The last Button at the bottom, allows for -
 
 In between the Start/Reset/Restart Button and the Players' `+` Buttons, there is a TextView that displays **"Help messages"** and **"Announcements of Scores"** just like in Tennis.
 
+### Player currently Serving
+
+<img src="https://user-images.githubusercontent.com/26028981/65620698-ec7fa480-dfdf-11e9-9294-c50eb9ac1fd6.png" width="40%"/>
+
+The Player currently Serving is indicated across three places on the screen -
+* **Scoreboard** - The Player Serving will be in **Bold**.
+* **Table of Ongoing Set** - The Player Serving will be in **Bold** ![#F57C00](https://placehold.it/15/f03c15/000000?text=+) color.
+* **Score Announcement Text** - The Score announced will be in respect to the Player Serving (that which is mentioned).
+
 ---
 
 ## Branches in this Repository
